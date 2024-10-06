@@ -25,6 +25,7 @@ Since this is a deliberately simple tool, the preferred way to implement these i
 **Pull requests welcome. I may or may not implement these myself when I feel like it.**
 
 - [ ] Attach notes to budget categories; view them by using a flag
+- [ ] Comment syntax
 - [ ] Metadata for specifying period the budget covers, default currency, etc. 
 - [ ] Integrate with beancount via bean-query to import real spending
 - [ ] Compare real spending to budgeted spending over a period
