@@ -7,6 +7,11 @@ class RenderData:
     currency_format: str
     currency_decimals: int
 
+PREDEFINED_CURRENCIES = {
+    "NTD": RenderData(width=0, currency_format="{neg}{amount} NTD", currency_decimals=0),
+    "USD": RenderData(width=0, currency_format="{neg}${amount}", currency_decimals=2)
+}
+
 def category_tree(tree: EntryTreeNode, render_data: RenderData, depth=0) -> list[str]:
     width = render_data.width
     lines = []

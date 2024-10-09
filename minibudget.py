@@ -11,6 +11,9 @@ def main():
     parser = ArgumentParser()
     parser.add_argument("file")
     parser.add_argument("--width", type=int, default=80)
+    parser.add_argument("--currency", 
+                        type=str, 
+                        help="The currency to render this budget with. A shortcut for --currency-format and --currency-decimals")
     parser.add_argument("--currency-format", 
                         default="{neg}${amount}", 
                         help="Currency format, using Python format string syntax. E.g. {neg}${amount}")
@@ -33,6 +36,11 @@ def main():
         parsed.currency_format,
         parsed.currency_decimals
     )
+
+    if parsed.currency in render.PREDEFINED_CURRENCIES:
+        currency_data = render.PREDEFINED_CURRENCIES[parsed.currency]
+        render_data.currency_format = currency_data.currency_format
+        render_data.currency_decimals = currency_data.currency_decimals
 
     report_data = transform.entries_to_report_data(entries)
 
