@@ -14,7 +14,10 @@ def category_tree(tree: EntryTreeNode, render_data: RenderData, depth=0) -> list
         left = f"{"    "*depth}{tag}"
         amount = child.category_total
         right = currency(amount, render_data)
-        spacer = " " * (width - (len(left) + len(right)))
+        right_width = len(right)
+        if child.entry is None:
+            right = f"\033[2m\033[3m{right}\033[23m\033[22m"
+        spacer = " " * (width - (len(left) + right_width))
         lines.append(f"{left}{spacer}{right}")
         lines.extend(category_tree(child, render_data, depth+1))
     return lines
