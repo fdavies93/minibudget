@@ -11,8 +11,13 @@ def main():
     parser = ArgumentParser()
     parser.add_argument("file")
     parser.add_argument("--width", type=int, default=80)
-    parser.add_argument("--currency-format", default="{neg}${amount}")
-    parser.add_argument("--currency-decimals", type=int, default=2)
+    parser.add_argument("--currency-format", 
+                        default="{neg}${amount}", 
+                        help="Currency format, using Python format string syntax. E.g. {neg}${amount}")
+    parser.add_argument("--currency-decimals", 
+                        type=int, 
+                        default=2, 
+                        help="Number of decimal places to display when rendering currency. E.g. 2 will render as $0.00, while 0 will render as $0.")
     parsed = parser.parse_args()
 
     entries = parse.budget(parsed.file)
