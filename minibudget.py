@@ -20,14 +20,14 @@ def main():
                         help="Number of decimal places to display when rendering currency. E.g. 2 will render as $0.00, while 0 will render as $0.")
     parsed = parser.parse_args()
 
-    entries = parse.budget(parsed.file)
-
     if parsed.width <= 0:
         raise ValueError("Display width must be more than 0.")
 
     if parsed.currency_decimals < 0:
         raise ValueError("Currency decimals must be 0 or more.")
 
+    entries = parse.budget(parsed.file)
+    
     render_data = RenderData(
         parsed.width,
         parsed.currency_format,

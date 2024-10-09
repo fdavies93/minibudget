@@ -11,6 +11,7 @@ class Entry:
 class EntryTreeNode:
     entry: Union[Entry,None]
     children: dict[str, "EntryTreeNode"]
+    category_total: int = 0
 
 @dataclass
 class ReportData:

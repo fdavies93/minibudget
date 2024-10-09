@@ -29,11 +29,27 @@ def generate_category_tree(entries: list[Entry]) -> EntryTreeNode:
         cur.entry = entry
     return root
 
+def attach_category_total(root: EntryTreeNode): 
+    if len(root.children) == 0 and root.entry is not None:
+        root.category_total = root.entry.amount
+        if root.entry.is_expense:
+            root.category_total *= -1
+        return
+
+    total = 0
+    for child in root.children.values():
+        attach_category_total(child)
+        total += child.category_total
+
+    root.category_total = total
+
 def entries_to_report_data(entries: list[Entry]) -> ReportData:
     income_entries = list(filter(lambda e: not e.is_expense, entries))
     expense_entries = list(filter(lambda e: e.is_expense, entries))
     income_tree = generate_category_tree(income_entries)
+    attach_category_total(income_tree)
     expenses_tree = generate_category_tree(expense_entries)
+    attach_category_total(expenses_tree)
 
     report_data = ReportData(
         entries,
