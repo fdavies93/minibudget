@@ -1,7 +1,7 @@
 import parse
 import render
 import transform
-from render import RenderData
+from render import RenderOptions
 
 class CommonParser:
     @staticmethod
@@ -19,14 +19,14 @@ class CommonParser:
                             help="Number of decimal places to display when rendering currency. E.g. 2 will render as $0.00, while 0 will render as $0.")
     
     @staticmethod
-    def get_render_data(args) -> RenderData:
+    def get_render_options(args) -> RenderOptions:
         if args.width <= 0:
             raise ValueError("Display width must be more than 0.")
 
         if args.currency_decimals < 0:
             raise ValueError("Currency decimals must be 0 or more.")
         
-        render_data = RenderData(
+        render_data = RenderOptions(
                     args.width,
                     args.currency_format,
                     args.currency_decimals
@@ -52,7 +52,7 @@ class ReportParser:
         entries = parse.budget(args.file)
         
         report_data = transform.entries_to_report_data(entries)
-        render_data = CommonParser.get_render_data(args)
+        render_data = CommonParser.get_render_options(args)
 
         render.report(report_data, render_data)
 
@@ -66,7 +66,7 @@ class DiffParser:
 
     @staticmethod
     def diff(args):
-        render_data = CommonParser.get_render_data(args)
+        render_data = CommonParser.get_render_options(args)
         if len(args.files) < 2:
             raise ValueError("Must have at least 2 files to produce a diff.")
 
