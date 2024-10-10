@@ -1,5 +1,6 @@
-+ Salary                 80000
-- Essential:Rent         20000
-- Essential:Food         10000
-- "Tax and Savings:Tax"   5000
-- "True Expenses:Home"    2000
++ Salary                 280000
+- Essential:Rent         120000
+- Essential:Food          30000
+- "Debt:Tax"               5000
+- "True Expenses:Home"    15000
+- Savings                100000

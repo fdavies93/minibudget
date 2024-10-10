@@ -1,51 +1,16 @@
 #!python
 from argparse import ArgumentParser
-from copy import deepcopy
-from model import Entry, EntryTreeNode, ReportData 
-import render
-from render import RenderData
-import parse
-import transform
+from parsers import ReportParser, DiffParser
 
 def main():
     parser = ArgumentParser()
-    parser.add_argument("file")
-    parser.add_argument("--width", type=int, default=80)
-    parser.add_argument("--currency", 
-                        type=str, 
-                        help="The currency to render this budget with. A shortcut for --currency-format and --currency-decimals")
-    parser.add_argument("--currency-format", 
-                        default="{neg}${amount}", 
-                        help="Currency format, using Python format string syntax. E.g. {neg}${amount}")
-    parser.add_argument("--currency-decimals", 
-                        type=int, 
-                        default=2, 
-                        help="Number of decimal places to display when rendering currency. E.g. 2 will render as $0.00, while 0 will render as $0.")
-    parsed = parser.parse_args()
+    subparsers = parser.add_subparsers(required=True)
 
-    if parsed.width <= 0:
-        raise ValueError("Display width must be more than 0.")
+    ReportParser.setup(subparsers)
+    DiffParser.setup(subparsers)
 
-    if parsed.currency_decimals < 0:
-        raise ValueError("Currency decimals must be 0 or more.")
-
-    entries = parse.budget(parsed.file)
-    
-    render_data = RenderData(
-        parsed.width,
-        parsed.currency_format,
-        parsed.currency_decimals
-    )
-
-    if parsed.currency in render.PREDEFINED_CURRENCIES:
-        currency_data = render.PREDEFINED_CURRENCIES[parsed.currency]
-        render_data.currency_format = currency_data.currency_format
-        render_data.currency_decimals = currency_data.currency_decimals
-
-    report_data = transform.entries_to_report_data(entries)
-
-    render.report(report_data, render_data)
-
+    args = parser.parse_args()
+    args.func(args) 
 
 if __name__ == "__main__":
     main()
