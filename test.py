@@ -3,12 +3,12 @@ import render
 def render_table():
     table = render.Table()
     
-    for column_name in ['Alpha','B','C','D']:
-        column = render.Column()
-        column.align = render.Alignment.CENTER
+    for column_name in ['A','B','C','D']:
+        column = render.TableColumn()
+        column.align = render.Alignment.LEFT
         column.add_cell(f"\033[1m{column_name}\033[22m")
         for i in range(5):
-            column.add_cell(f"{column_name * i}")
+            column.add_cell(f"{"\t" * i}{column_name * i}")
         table.columns.append(column) 
     lines = table.render(render.RenderOptions(80, "", 2))
     print('\n'.join(lines))

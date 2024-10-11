@@ -21,25 +21,52 @@ class Alignment(IntEnum):
     CENTER = 1
     RIGHT = 2
 
-class Column:
+class TableCell:
+    content: str
+    # North, East, South, West
+    borders: tuple[bool,bool,bool,bool]
+
+    def __init__(self, 
+                 content: str, 
+                 borders: tuple[bool, bool, bool, bool] = (True,True,True,True)):
+        self.content = content.replace("\t"," " * 4)
+        self.borders = borders
+
+    def lines(self):
+        return self.content.splitlines()
+
+class TableColumn:
     def __init__(self):
-        self.cells = []
-        self.align = Alignment.LEFT
-        self.width = 0
+        self.cells: list[TableCell] = []
+        self.align: Alignment = Alignment.LEFT
+        self.content_width: int = 0
 
     def add_cell(self, content: str):
-        lines = content.split('\n')
+        cell = TableCell(content)
+        lines = cell.content.split('\n')
         for line in lines:
-            if text_len(line) > self.width:
-                self.width = text_len(line)
-        self.cells.append(content)
+            if text_len(line) > self.content_width:
+                self.content_width = text_len(line)
+        self.cells.append(cell)
+
+# TODO:
+# - Include FIT_TO_CONTENT and FIT_TO_TABLE options for column width
+#   - FIT_TO_CONTENT is always the width of content + padding
+#   - FIT_TO_TABLE takes the remaining free space after FIT_TO_CONTENT
+#     columns have been calculated.
+#   - If we run out of free space, truncate FIT_TO_TABLE columns.
+#   - If we still can't fit, just render the table at full width, but with
+#     everything over the set width truncated.
+# - Make it possible to control borders on a per-cell basis.
+#   - This requires storing style options in each cell as data.
+# - Stripy rows; control background and color styles on a per-cell basis.
 
 class Table:
     def __init__(self):
-        self.columns: list[Column] = []
+        self.columns: list[TableColumn] = []
 
-    def render(self, options: RenderOptions):
-        table_width = sum([ col.width for col in self.columns ])
+    def render(self, options: RenderOptions) -> list[str]:
+        table_width = sum([ col.content_width for col in self.columns ])
         # adjust for drawing column lines
         table_width += len(self.columns) + 1
         # adjust for padding
@@ -55,7 +82,7 @@ class Table:
             if row_i == 0:
                 line = "┌"
                 for j, col in enumerate(self.columns):
-                    line += ("─" * (col.width + 2))
+                    line += ("─" * (col.content_width + 2))
                     if j < len(self.columns) - 1:
                         line += "┬" 
                     else:
@@ -64,7 +91,7 @@ class Table:
             max_height = 1
             # since we want each row to be the right height
             for col in self.columns:
-                lines = col.cells[row_i].split("\n")
+                lines = col.cells[row_i].lines()
                 if len(lines) > max_height:
                     max_height = len(lines)
             # finally, we can render the (logical) row
@@ -72,7 +99,7 @@ class Table:
             footer = "├"
             for i, col in enumerate(self.columns):
                 # We do this so we can render multi-line cells
-                content_split = col.cells[row_i].split("\n")
+                content_split = col.cells[row_i].lines()
                 # Draw left table border 
                 if i == 0:
                     for j, _ in enumerate(rows): 
@@ -80,14 +107,14 @@ class Table:
                 # Actually render the cell contents
                 for i2, _ in enumerate(rows):
                     if len(content_split) > i2:
-                        rows[i2] += render_aligned(content_split[i2],col.width,col.align)
+                        rows[i2] += render_aligned(content_split[i2],col.content_width,col.align)
                     else:
-                        rows[i2] += " " * col.width
+                        rows[i2] += " " * col.content_width
                 # Add column divider
                 for j, _ in enumerate(rows): rows[j] += " │ "
             # Draw the footer for this row including + joins
             for j, col in enumerate(self.columns):
-                footer += ("─" * (col.width + 2))
+                footer += ("─" * (col.content_width + 2))
                 if j < len(self.columns) - 1:
                     footer += "┼"
                 else: footer += "┤"
@@ -100,7 +127,7 @@ class Table:
             if row_i == table_rows - 1:
                 line = "└"
                 for j, col in enumerate(self.columns):
-                    line += "─" * (col.width + 2)
+                    line += "─" * (col.content_width + 2)
                     if j < len(self.columns) - 1:
                         line += "┴"
                     else:
