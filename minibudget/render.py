@@ -1,4 +1,4 @@
-from model import EntryTreeNode, ReportData
+from minibudget.model import EntryTreeNode, ReportData
 from dataclasses import dataclass
 import rich
 

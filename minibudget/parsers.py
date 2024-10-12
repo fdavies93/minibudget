@@ -1,7 +1,7 @@
-import parse
-import render
-import transform
-from render import RenderOptions
+from minibudget import parse
+from minibudget import render
+from minibudget import transform
+from minibudget.render import RenderOptions
 
 class CommonParser:
     @staticmethod

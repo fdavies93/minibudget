@@ -1,4 +1,4 @@
-from model import Entry, EntryTreeNode, ReportData
+from minibudget.model import Entry, EntryTreeNode, ReportData
 from copy import deepcopy
 
 def calculate_total(entries: list[Entry]) -> int:

@@ -1,6 +1,6 @@
 #!python
 from argparse import ArgumentParser
-from parsers import ReportParser, DiffParser
+from minibudget.parsers import ReportParser, DiffParser
 
 def main():
     parser = ArgumentParser()

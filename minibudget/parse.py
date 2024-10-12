@@ -1,4 +1,4 @@
-from model import Entry
+from minibudget.model import Entry
 import sys
 
 def tokenise_line(ln: str) -> list[str]:
