@@ -2,6 +2,8 @@ from minibudget import parse
 from minibudget import render
 from minibudget import transform
 from minibudget.render import RenderOptions, category_tree
+from rich.console import Console
+from pathlib import Path
 
 class CommonParser:
     @staticmethod
@@ -74,5 +76,7 @@ class DiffParser:
 
         category_trees = [ transform.generate_category_dict(f) for f in file_entries]
         diff_tree = transform.generate_diff_dict(category_trees)
-        lines = render.diff_tree(diff_tree, render_data)
-        print("\n".join(lines))
+        names = [ Path(f).stem for f in args.files ]
+        table = render.diff_tree(diff_tree, names, render_data)
+        console = Console()
+        console.print(table)

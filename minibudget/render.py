@@ -1,7 +1,9 @@
+from rich.markup import render
 from minibudget.model import ReportData, Entry
 from dataclasses import dataclass
 from minibudget.helpers import dft_diff_dict, dft_entry_dict
-import rich
+from rich.table import Table
+from rich.text import Text
 from typing import Union
 
 @dataclass
@@ -30,11 +32,21 @@ def category_tree(categories: dict[str, Entry], render_data: RenderOptions) -> l
     dft_entry_dict(categories, fn=render_category )
     return lines
 
-def diff_tree(tree: dict[str, list[Union[Entry | None]]], render_data: RenderOptions) -> list[str]:
+def diff_tree(tree: dict[str, list[Union[Entry, None]]], names: list[str], render_data: RenderOptions) -> Table:
+    table = Table()
+    table.add_column("Category")
+    for name in names:
+        table.add_column(name, justify="right")
+
     lines = []
 
-    def render_category(entries: list[Entry]):
-        amounts = [ str(entry.amount) for entry in entries ]
+    def render_category(entries: list[Union[Entry, None]]):
+        amounts = []
+        for entry in entries:
+            if entry == None:
+                amounts.append(0)
+            else:
+                amounts.append(entry.amount)
         tag = ""
         depth = 0 
 
@@ -43,12 +55,25 @@ def diff_tree(tree: dict[str, list[Union[Entry | None]]], render_data: RenderOpt
                 tag = entry.categories[-1]
                 depth = len(entry.categories) - 1
 
-        left = f"{"    "*depth}{tag}"
-        right = ", ".join(amounts)
-        lines.append(f"{left} | {right}")
+        category = f"{"    "*depth}{tag}"
+        cells = [Text( currency(amounts[0], render_data) )]
+
+        for i, amount in enumerate(amounts[1:]):
+            diff = amount - amounts[i]
+            amount_rendered = f"{currency(amount, render_data)}\n"
+            diff_rendered = Text(currency(diff, render_data))
+            if diff > 0:
+                diff_rendered.stylize("green")
+            elif diff == 0:
+                diff_rendered.stylize("dim")
+            elif diff < 0:
+                diff_rendered.stylize("red")
+            cells.append( Text.assemble(amount_rendered,diff_rendered) )
+
+        table.add_row( category, *cells ) 
 
     dft_diff_dict(tree, fn=render_category)
-    return lines
+    return table
 
 def currency(units: int, render_data: RenderOptions) -> str:
     # so we can do e.g. -$100 instead of $-100
