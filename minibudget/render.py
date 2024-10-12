@@ -17,8 +17,9 @@ PREDEFINED_CURRENCIES = {
 def category_tree(categories: dict[str, Entry], render_data: RenderOptions) -> list[str]:
     width = render_data.width
     lines = []
-
+    
     def render_category(entry: Entry):
+        print(entry.children)
         depth = len(entry.categories) - 1
         tag = entry.categories[-1]
         left = f"{"    "*depth}{tag}"

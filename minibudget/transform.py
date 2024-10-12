@@ -30,7 +30,8 @@ def generate_category_dict(entries: list[Entry]) -> dict[str, Entry]:
             category_key = ":".join(parent_categories)
             if category_key in output:
                 output[category_key].amount += entry.amount
-                output[category_key].children.append(last_category)
+                if last_category not in output[category_key].children:
+                    output[category_key].children.append(last_category)
                 last_category = category_key
                 continue
             output[category_key] = Entry(parent_categories, 
@@ -39,7 +40,6 @@ def generate_category_dict(entries: list[Entry]) -> dict[str, Entry]:
                                          [last_category]
                                          )
             last_category = category_key
-
     return output
 
 def entries_to_report_data(entries: list[Entry]) -> ReportData:
