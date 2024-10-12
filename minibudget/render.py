@@ -18,27 +18,11 @@ PREDEFINED_CURRENCIES = {
     "USD": RenderOptions(width=0, currency_format="{neg}${amount}", currency_decimals=2)
 }
 
-def category_tree(categories: dict[str, Entry], render_data: RenderOptions) -> list[str]:
-    width = render_data.width
-    lines = []
-    
-    def render_category(entry: Entry):
-        depth = len(entry.categories) - 1
-        tag = entry.categories[-1]
-        left = f"{"    "*depth}{tag}"
-        right = currency(entry.amount, render_data)
-        spacer = " " * (width - (len(left) + len(right)))
-        lines.append(f"{left}{spacer}{right}")
-
-    dft_entry_dict(categories, fn=render_category )
-    return lines
-
-
 def report_table(title: str,categories: dict[str, Entry], total: int, render_data: RenderOptions) -> Table:
     
     table = Table(title=title, expand=True)
-    table.add_column("Category")
-    table.add_column("Amount", justify="right")
+    table.add_column("Category", ratio=5)
+    table.add_column("Amount", justify="right", ratio=2)
 
     def render_category(entry: Entry):
         depth = len(entry.categories) - 1
@@ -54,7 +38,7 @@ def report_table(title: str,categories: dict[str, Entry], total: int, render_dat
     return table
 
 def diff_tree(tree: dict[str, list[Union[Entry, None]]], names: list[str], render_data: RenderOptions) -> Table:
-    table = Table()
+    table = Table(expand=True)
     table.add_column("Category")
     for name in names:
         table.add_column(name, justify="right")
@@ -109,15 +93,6 @@ def currency(units: int, render_data: RenderOptions) -> str:
     output = render_data.currency_format.format(amount=amount, neg="-" if units < 0 else "") 
     return output
 
-def total_header(heading: str, total: int, render_data: RenderOptions) -> list[str]:
-    width = render_data.width
-    lines = ["-" * width]
-    right = currency(total, render_data)
-    spacer = " " * ( width - (len(heading) + len(right)) )
-    lines.append(f"{heading}{spacer}{right}")
-    lines.append("-" * width)
-    return lines
-
 def report(data: ReportData, render_data: RenderOptions):
     console = rich.console.Console()
     
@@ -135,15 +110,11 @@ def report(data: ReportData, render_data: RenderOptions):
         unassigned_string = currency(data.total_unassigned, render_data)
 
     unassigned_table = Table(expand=True, show_header=False, border_style=unassigned_style, row_styles=[unassigned_style])
-    unassigned_table.add_column()
-    unassigned_table.add_column(justify="right")
+    unassigned_table.add_column(ratio=5)
+    unassigned_table.add_column(justify="right", ratio=2)
 
     unassigned_table.add_row("Unassigned funds", unassigned_string)
-
-    lines = [
-        *total_header("UNASSIGNED", data.total_unassigned,render_data)
-    ]
-
+ 
     console.print(income_table, expense_table, unassigned_table)
  
 def diff(reports: list[ReportData], render_data: RenderOptions):

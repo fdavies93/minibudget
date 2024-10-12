@@ -1,7 +1,7 @@
 from minibudget import parse
 from minibudget import render
 from minibudget import transform
-from minibudget.render import RenderOptions, category_tree
+from minibudget.render import RenderOptions
 from rich.console import Console
 from pathlib import Path
 
