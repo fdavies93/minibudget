@@ -72,9 +72,13 @@ def diff_tree(tree: dict[str, list[Union[Entry, None]]], names: list[str], rende
             elif diff < 0:
                 diff_rendered.stylize("red")
             cells.append( Text.assemble(amount_rendered,diff_rendered) )
-
-        table.add_row( category, *cells ) 
-
+        
+        if depth == 0:
+            table.add_section()
+        table.add_row( category, *cells )
+        if depth == 0:
+            table.add_section()
+        
     dft_diff_dict(tree, fn=render_category)
     return table
 
