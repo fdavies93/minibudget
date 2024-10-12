@@ -1,5 +1,6 @@
-from minibudget.model import EntryTreeNode, ReportData
+from minibudget.model import ReportData, Entry
 from dataclasses import dataclass
+from minibudget.helpers import dft_entry_dict
 import rich
 
 @dataclass
@@ -13,21 +14,21 @@ PREDEFINED_CURRENCIES = {
     "USD": RenderOptions(width=0, currency_format="{neg}${amount}", currency_decimals=2)
 }
 
-def category_tree(tree: EntryTreeNode, render_data: RenderOptions, depth=0) -> list[str]:
+def category_tree(categories: dict[str, Entry], render_data: RenderOptions) -> list[str]:
     width = render_data.width
     lines = []
-    for tag, child in tree.children.items():
-        left = f"{"    "*depth}{tag}"
-        amount = child.category_total
-        right = currency(amount, render_data)
-        right_width = len(right)
-        if child.entry is None:
-            right = f"{right}"
-        spacer = " " * (width - (len(left) + right_width))
-        lines.append(f"{left}{spacer}{right}")
-        lines.extend(category_tree(child, render_data, depth+1))
-    return lines
 
+    def render_category(entry: Entry):
+        depth = len(entry.categories) - 1
+        tag = entry.categories[-1]
+        left = f"{"    "*depth}{tag}"
+        right = currency(entry.amount, render_data)
+        spacer = " " * (width - (len(left) + len(right)))
+        lines.append(f"{left}{spacer}{right}")
+
+    dft_entry_dict(categories, fn=render_category )
+    return lines
+    
 def currency(units: int, render_data: RenderOptions) -> str:
     # so we can do e.g. -$100 instead of $-100
     amount = str(abs(units))
@@ -55,9 +56,12 @@ def total_header(heading: str, total: int, render_data: RenderOptions) -> list[s
 def report(data: ReportData, render_data: RenderOptions):
     lines = [
         *total_header("INCOME", data.total_income,render_data),
-        *category_tree(data.income_tree, render_data),
+        *category_tree(data.income_dict, render_data),
         *total_header("EXPENSES", data.total_expenses,render_data),
-        *category_tree(data.expenses_tree, render_data),
+        *category_tree(data.expense_dict, render_data),
         *total_header("UNASSIGNED", data.total_unassigned,render_data)
     ]
     print("\n".join(lines))
+
+def diff(reports: list[ReportData], render_data: RenderOptions):
+    pass

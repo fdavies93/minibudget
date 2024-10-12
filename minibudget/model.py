@@ -4,20 +4,21 @@ from typing import Union
 @dataclass
 class Entry:
     categories: list[str]
-    is_expense: bool
+    is_calculated: bool
     amount: int
+    children: list[str]
  
 @dataclass
-class EntryTreeNode:
-    entry: Union[Entry,None]
-    children: dict[str, "EntryTreeNode"]
-    category_total: int = 0
-
-@dataclass
 class ReportData:
-    entry_list: list[Entry]
-    income_tree: EntryTreeNode
-    expenses_tree: EntryTreeNode
+    entries: list[Entry]
     total_income: int
+    income_dict: dict[str, Entry]
     total_expenses: int
+    expense_dict: dict[str, Entry]
     total_unassigned: int
+
+@dataclass 
+class DiffTreeNode:
+    category_name: str
+    category_totals: list[int] 
+    children: dict[str, "DiffTreeNode"]

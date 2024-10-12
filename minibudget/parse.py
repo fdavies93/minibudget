@@ -27,11 +27,15 @@ def line(ln: str) -> Entry:
 
     categories = fields[1].split(":")
     amount = int(fields[2])
-    
+
+    if is_expense:
+        amount = amount * -1
+
     return Entry(
         categories=categories,
-        is_expense=is_expense,
-        amount=amount
+        is_calculated=False,
+        amount=amount,
+        children=[]
     )
 
 def budget(filename: str):
