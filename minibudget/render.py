@@ -1,7 +1,8 @@
 from minibudget.model import ReportData, Entry
 from dataclasses import dataclass
-from minibudget.helpers import dft_entry_dict
+from minibudget.helpers import dft_diff_dict, dft_entry_dict
 import rich
+from typing import Union
 
 @dataclass
 class RenderOptions:
@@ -19,7 +20,6 @@ def category_tree(categories: dict[str, Entry], render_data: RenderOptions) -> l
     lines = []
     
     def render_category(entry: Entry):
-        print(entry.children)
         depth = len(entry.categories) - 1
         tag = entry.categories[-1]
         left = f"{"    "*depth}{tag}"
@@ -29,7 +29,27 @@ def category_tree(categories: dict[str, Entry], render_data: RenderOptions) -> l
 
     dft_entry_dict(categories, fn=render_category )
     return lines
-    
+
+def diff_tree(tree: dict[str, list[Union[Entry | None]]], render_data: RenderOptions) -> list[str]:
+    lines = []
+
+    def render_category(entries: list[Entry]):
+        amounts = [ str(entry.amount) for entry in entries ]
+        tag = ""
+        depth = 0 
+
+        for entry in entries:
+            if entry != None:
+                tag = entry.categories[-1]
+                depth = len(entry.categories) - 1
+
+        left = f"{"    "*depth}{tag}"
+        right = ", ".join(amounts)
+        lines.append(f"{left} | {right}")
+
+    dft_diff_dict(tree, fn=render_category)
+    return lines
+
 def currency(units: int, render_data: RenderOptions) -> str:
     # so we can do e.g. -$100 instead of $-100
     amount = str(abs(units))

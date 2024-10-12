@@ -1,3 +1,4 @@
+from typing import Union
 from minibudget.model import Entry, ReportData, DiffTreeNode
 from copy import deepcopy
 
@@ -41,6 +42,15 @@ def generate_category_dict(entries: list[Entry]) -> dict[str, Entry]:
                                          )
             last_category = category_key
     return output
+
+def generate_diff_dict(category_dicts: list[dict[str, Entry]]) -> dict[str, list[Union[Entry, None]]]:
+    diff_dict = {}
+    for dict_i, category_dict in enumerate(category_dicts): 
+        for key, entry in category_dict.items():
+            if key not in diff_dict:
+                diff_dict[key] = [None] * len(category_dicts)
+            diff_dict[key][dict_i] = entry
+    return diff_dict
 
 def entries_to_report_data(entries: list[Entry]) -> ReportData:
     income_entries = list(filter(lambda e: e.amount >= 0, entries))

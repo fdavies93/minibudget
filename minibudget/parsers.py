@@ -1,7 +1,7 @@
 from minibudget import parse
 from minibudget import render
 from minibudget import transform
-from minibudget.render import RenderOptions
+from minibudget.render import RenderOptions, category_tree
 
 class CommonParser:
     @staticmethod
@@ -71,4 +71,8 @@ class DiffParser:
             raise ValueError("Must have at least 2 files to produce a diff.")
 
         file_entries = [ parse.budget(filename) for filename in args.files ]
-        
+
+        category_trees = [ transform.generate_category_dict(f) for f in file_entries]
+        diff_tree = transform.generate_diff_dict(category_trees)
+        lines = render.diff_tree(diff_tree, render_data)
+        print("\n".join(lines))
