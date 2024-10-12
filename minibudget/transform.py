@@ -35,7 +35,8 @@ def generate_category_dict(entries: list[Entry]) -> dict[str, Entry]:
                     output[category_key].children.append(last_category)
                 last_category = category_key
                 continue
-            output[category_key] = Entry(parent_categories, 
+            output[category_key] = Entry(parent_categories,
+                                         entry.is_income,
                                          True, 
                                          entry.amount,
                                          [last_category]
@@ -53,8 +54,8 @@ def generate_diff_dict(category_dicts: list[dict[str, Entry]]) -> dict[str, list
     return diff_dict
 
 def entries_to_report_data(entries: list[Entry]) -> ReportData:
-    income_entries = list(filter(lambda e: e.amount >= 0, entries))
-    expense_entries = list(filter(lambda e: e.amount < 0, entries))
+    income_entries = list(filter(lambda e: e.is_income, entries))
+    expense_entries = list(filter(lambda e: not e.is_income, entries))
     
     report_data = ReportData(
         entries,

@@ -4,6 +4,7 @@ from typing import Union
 @dataclass
 class Entry:
     categories: list[str]
+    is_income: bool
     is_calculated: bool
     amount: int
     children: list[str]

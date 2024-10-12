@@ -33,6 +33,7 @@ def line(ln: str) -> Entry:
 
     return Entry(
         categories=categories,
+        is_income=not is_expense,
         is_calculated=False,
         amount=amount,
         children=[]
