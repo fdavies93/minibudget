@@ -13,7 +13,7 @@ I wrote the MVP in an evening because:
 Clone the repo.
 
 ```sh
-python minibudget.py example.budget
+python minibudget.py report example.budget
 ```
 
 Now take a look at `example.budget` to learn more about it.
@@ -28,7 +28,6 @@ Since this is a deliberately simple tool, the preferred way to implement these i
 - [ ] Comment syntax
 - [ ] Metadata for specifying period the budget covers, default currency, etc. 
 - [ ] Integrate with beancount via bean-query to import real spending
-- [ ] Compare real spending to budgeted spending over a period
 - [ ] Totals for budget categories, not just the top level income / expenses / unassigned
     - [ ] Assertions by allocating to categories with children; check if the budget for a category matches the total of its children (e.g. does discretionary spending match the totals of clothes, dining out, and entertainment?)
 - [ ] Cool formatting for CLI
