@@ -1,6 +1,7 @@
 from minibudget import parse
 from minibudget import render
 from minibudget import transform
+from minibudget import convert
 from minibudget.render import RenderOptions
 from rich.console import Console
 from pathlib import Path
@@ -80,3 +81,25 @@ class DiffParser:
         table = render.diff_tree(diff_tree, names, render_data)
         console = Console()
         console.print(table)
+
+class ConvertParser:
+    @staticmethod
+    def setup(parent_subparser):
+        convert_parser = parent_subparser.add_parser("convert", help="Convert to minibudget format from other financial formats.")
+        convert_parser.add_argument("file")
+        convert_parser.add_argument("--currency", help="The currency to convert into minibudget format, where multiple are available.", default="USD")
+        convert_parser.add_argument("--format", help="Format of the input file to output as minibudget entries.", choices=["beancount"])
+        convert_parser.set_defaults(func=ConvertParser.convert)
+
+    @staticmethod
+    def convert(args):
+        format = ConvertParser.infer_format(args)
+        if format == "beancount":
+            print(convert.beancount(args.file, args.currency))
+        
+    @staticmethod
+    def infer_format(args):
+        if args.format is not None:
+            return args.format
+        # some pathlib stuff
+
