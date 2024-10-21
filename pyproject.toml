@@ -9,6 +9,10 @@ license="AGPL-3.0-or-later"
 [tool.poetry.dependencies]
 python = "^3.10"
 rich = "^13.9.2"
+beanquery = {version = "^0.1.dev0", optional = true}
+
+[tool.poetry.extras]
+convert = ["beanquery"]
 
 [tool.poetry.scripts]
 minibudget = "minibudget.minibudget:main"

@@ -96,10 +96,16 @@ class ConvertParser:
         format = ConvertParser.infer_format(args)
         if format == "beancount":
             print(convert.beancount(args.file, args.currency))
+        else:
+            raise ValueError(f"{args.file} is not a parseable type.")
+
         
     @staticmethod
     def infer_format(args):
         if args.format is not None:
             return args.format
-        # some pathlib stuff
-
+        file_path = Path(args.file)
+        if file_path.suffix == ".beancount":
+            return "beancount"
+        return None
+            
