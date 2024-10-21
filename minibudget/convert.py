@@ -21,7 +21,7 @@ def beancount_to_entry(record: dict, currency: str) -> Union[Entry, None]:
         return None
     categories = record["account"].split(":")
     return Entry(
-        categories=categories,
+        categories=categories[1:],
         is_calculated=False,
         is_income=(categories[0] == "Income"),
         # the linter hates this, but it's succinct
