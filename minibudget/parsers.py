@@ -95,10 +95,10 @@ class ConvertParser:
     def convert(args):
         format = ConvertParser.infer_format(args)
         if format == "beancount":
-            print(convert.beancount(args.file, args.currency))
+            entries = convert.beancount(args.file, args.currency)
         else:
             raise ValueError(f"{args.file} is not a parseable type.")
-
+        print(convert.entry_list_to_string(entries))
         
     @staticmethod
     def infer_format(args):
