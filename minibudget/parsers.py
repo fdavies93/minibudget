@@ -87,6 +87,9 @@ class ConvertParser:
     def setup(parent_subparser):
         convert_parser = parent_subparser.add_parser("convert", help="Convert to minibudget format from other financial formats.")
         convert_parser.add_argument("file")
+        convert_parser.add_argument("--width", help="Width of the output minibudget.", default=80)
+        convert_parser.add_argument("--start", help="Start date to query from, inclusive.")
+        convert_parser.add_argument("--end", help="End date to query until, inclusive.")
         convert_parser.add_argument("--currency", help="The currency to convert into minibudget format, where multiple are available.", default="USD")
         convert_parser.add_argument("--format", help="Format of the input file to output as minibudget entries.", choices=["beancount"])
         convert_parser.set_defaults(func=ConvertParser.convert)
@@ -95,10 +98,10 @@ class ConvertParser:
     def convert(args):
         format = ConvertParser.infer_format(args)
         if format == "beancount":
-            entries = convert.beancount(args.file, args.currency)
+            entries = convert.beancount(args.file, args.currency, args.start, args.end)
         else:
             raise ValueError(f"{args.file} is not a parseable type.")
-        print(convert.entry_list_to_string(entries))
+        print(convert.entry_list_to_string(entries, int(args.width)))
         
     @staticmethod
     def infer_format(args):
