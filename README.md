@@ -27,9 +27,10 @@ get the required packages.
 
 ## Documentation
 
-- [`report` command](docs/report)
-- [`diff` command](docs/diff)
-- [`convert` command](docs/convert)
+- [budget format](docs/budget-format.md) 
+- [`minibudget report`](docs/report.md)
+- [`minibudget diff`](docs/diff.md)
+- [`minibudget convert`](docs/convert.md)
 
 ## Possible Features
 
@@ -49,6 +50,10 @@ like it.**
 - [ ] Generate cool charts
 - [ ] Proper multi-currency support (this is probably out of scope for a simple tool like this)
 - [ ] Implement non-regression and unit testing
+- [ ] CSV output options, especially for `diff` (as table grows large very quickly)
+- [ ] JSON output options, mainly for testing but could be used for integrations
+- [ ] Convert ledger records to minibudget format
+- [ ] Convert csvs to minibudget format
 
 ## Completed Features
 
