@@ -31,6 +31,7 @@ get the required packages.
 - [`minibudget report`](docs/report.md)
 - [`minibudget diff`](docs/diff.md)
 - [`minibudget convert`](docs/convert.md)
+- [currency formats](docs/currency-formats.md)
 
 ## Possible Features
 
