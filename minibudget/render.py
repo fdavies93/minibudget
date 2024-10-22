@@ -18,9 +18,11 @@ PREDEFINED_CURRENCIES = {
     "USD": RenderOptions(width=0, currency_format="{neg}${amount}", currency_decimals=2)
 }
 
-def report_table(title: str,categories: dict[str, Entry], total: int, render_data: RenderOptions) -> Table:
-    
+def report_table(title: str,categories: dict[str, Entry], total: int, render_data: RenderOptions) -> Table: 
     table = Table(title=title, expand=True)
+    if render_data.width != None:
+        table.width = render_data.width
+        table.expand = False
     table.add_column("Category", ratio=5)
     table.add_column("Amount", justify="right", ratio=2)
 
@@ -39,6 +41,9 @@ def report_table(title: str,categories: dict[str, Entry], total: int, render_dat
 
 def diff_tree(tree: dict[str, list[Union[Entry, None]]], names: list[str], render_data: RenderOptions) -> Table:
     table = Table(expand=True)
+    if render_data.width != None:
+        table.width = render_data.width
+        table.expand = False
     table.add_column("Category")
     for name in names:
         table.add_column(name, justify="right")
@@ -114,6 +119,11 @@ def report(data: ReportData, render_data: RenderOptions):
         unassigned_string = currency(data.total_unassigned, render_data)
 
     unassigned_table = Table(expand=True, show_header=False, border_style=unassigned_style, row_styles=[unassigned_style])
+    
+    if render_data.width != None:
+        unassigned_table.width = render_data.width
+        unassigned_table.expand = False
+
     unassigned_table.add_column(ratio=5)
     unassigned_table.add_column(justify="right", ratio=2)
 

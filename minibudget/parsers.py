@@ -9,7 +9,7 @@ from pathlib import Path
 class CommonParser:
     @staticmethod
     def setup_render_options(parser):
-        parser.add_argument("--width", type=int, default=80)
+        parser.add_argument("--width", help="Width of the rendered report in characters. Defaults to the space available in the terminal.", type=int)
         parser.add_argument("--currency", 
                             type=str, 
                             help="The currency to render this budget with. A shortcut for --currency-format and --currency-decimals")
@@ -22,10 +22,7 @@ class CommonParser:
                             help="Number of decimal places to display when rendering currency. E.g. 2 will render as $0.00, while 0 will render as $0.")
     
     @staticmethod
-    def get_render_options(args) -> RenderOptions:
-        if args.width <= 0:
-            raise ValueError("Display width must be more than 0.")
-
+    def get_render_options(args) -> RenderOptions: 
         if args.currency_decimals < 0:
             raise ValueError("Currency decimals must be 0 or more.")
         
@@ -87,10 +84,10 @@ class ConvertParser:
     def setup(parent_subparser):
         convert_parser = parent_subparser.add_parser("convert", help="Convert to minibudget format from other financial formats.")
         convert_parser.add_argument("file")
-        convert_parser.add_argument("--width", help="Width of the output minibudget.", default=80)
+        convert_parser.add_argument("--width", help="Width of the output minibudget in characters. Default is 80.", default=80)
         convert_parser.add_argument("--start", help="Start date to query from, inclusive.")
         convert_parser.add_argument("--end", help="End date to query until, inclusive.")
-        convert_parser.add_argument("--currency", help="The currency to convert into minibudget format, where multiple are available.", default="USD")
+        convert_parser.add_argument("--currency", help="The currency to convert into minibudget format, where multiple are available. Default is USD.", default="USD")
         convert_parser.add_argument("--format", help="Format of the input file to output as minibudget entries.", choices=["beancount"])
         convert_parser.set_defaults(func=ConvertParser.convert)
 
