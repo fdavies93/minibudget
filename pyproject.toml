@@ -3,8 +3,14 @@ name = "minibudget"
 version = "0.1.0"
 description = "A simple CLI tool for personal and small business budgeting."
 authors = ["Frank Davies"]
+repository = "https://github.com/fdavies93/minibudget"
 readme = "README.md"
 license="AGPL-3.0-or-later"
+keywords=["minibudget","plaintext","plaintext-accounting","cli"]
+classifiers=[
+	"License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)",
+	"Topic :: Office/Business :: Financial"
+]
 
 [tool.poetry.dependencies]
 python = "^3.10"
