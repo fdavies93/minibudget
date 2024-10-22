@@ -12,6 +12,24 @@ I wrote the MVP in an evening because:
 
 ## Quickstart
 
+### Install with pipx
+
+This is the recommended way to use minibudget. First [install pipx](https://pipx.pypa.io/stable/installation/) if you
+don't already have it.
+
+Then install. It's best to install the version with `[convert]` extras.
+
+```sh
+pipx install "minibudget[convert]" --pip-args "'--pre'"
+```
+
+You should be able to run `minibudget` from the command line like other CLI tools:
+
+```sh
+wget https://raw.githubusercontent.com/fdavies93/minibudget/refs/heads/main/budgets/example.budget
+minibudget report example.budget
+```
+
 ### Run from Source
 
 Clone the repo. [Poetry](https://python-poetry.org/) is the easiest way to run it.
