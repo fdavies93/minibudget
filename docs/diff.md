@@ -24,9 +24,16 @@ always rolling (i.e. as they relate to the previous budget in the list).
 
 ### Rendering
 
+`--output {text | csv}`
+
+The format of the output. Defaults to text.
+
+When set to CSV output, the `width` option will be ignored.
+
 `--width`
 
-The width of the output report, in characters. Defaults to the full terminal width.
+The width of the output report for text mode, in characters. Defaults to the 
+full terminal width.
 
 `--currency-format`
 
