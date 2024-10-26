@@ -95,6 +95,11 @@ def diff_csv(
 ) -> list[list[str]]: 
     rows = []
     header = ["Category"] + names
+
+    # add diff column headers
+    for i, name in enumerate(names[1:]):
+        header.append(f"diff({names[i]},{name})")
+
     rows.append(header)
  
     def render_category(entries: list[Union[Entry, None]]):
@@ -110,17 +115,16 @@ def diff_csv(
             if entry != None:
                 tag = ":".join(entry.categories)
         
-        row_1 = [tag, currency(amounts[0], render_data)]
-        row_2 = ["", ""]
-
+        row = [tag]
+        # add raw amounts
+        for amount in amounts:
+            row.append(currency(amount, render_data)) 
+        # add diff columns
         for i, amount in enumerate(amounts[1:]):
             diff = amount - amounts[i]
-            amount_rendered = currency(amount, render_data)
-            diff_rendered = currency(diff, render_data)
-            row_1.append(amount_rendered)
-            row_2.append(diff_rendered)
-
-        rows.extend([row_1, row_2])
+            row.append(currency(diff, render_data))
+ 
+        rows.append(row)
 
     dft_diff_dict(tree, fn=render_category)
 
