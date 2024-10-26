@@ -87,6 +87,49 @@ def diff_tree(tree: dict[str, list[Union[Entry, None]]], names: list[str], rende
     dft_diff_dict(tree, fn=render_category)
     return table
 
+
+def diff_csv(
+        tree: dict[str, list[Union[Entry, None]]],
+        names: list[str],
+        render_data: RenderOptions
+) -> list[list[str]]: 
+    rows = []
+    header = ["Category"] + names
+
+    # add diff column headers
+    for i, name in enumerate(names[1:]):
+        header.append(f"diff({names[i]},{name})")
+
+    rows.append(header)
+ 
+    def render_category(entries: list[Union[Entry, None]]):
+        amounts = []
+        for entry in entries:
+            if entry == None:
+                amounts.append(0)
+            else:
+                amounts.append(entry.amount)
+
+        tag = ""
+        for entry in entries:
+            if entry != None:
+                tag = ":".join(entry.categories)
+        
+        row = [tag]
+        # add raw amounts
+        for amount in amounts:
+            row.append(currency(amount, render_data)) 
+        # add diff columns
+        for i, amount in enumerate(amounts[1:]):
+            diff = amount - amounts[i]
+            row.append(currency(diff, render_data))
+ 
+        rows.append(row)
+
+    dft_diff_dict(tree, fn=render_category)
+
+    return rows
+
 def currency(units: int, render_data: RenderOptions) -> str:
     # so we can do e.g. -$100 instead of $-100
     amount = str(abs(units))

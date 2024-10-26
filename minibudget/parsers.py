@@ -1,3 +1,5 @@
+import csv
+import sys
 from minibudget import parse
 from minibudget import render
 from minibudget import transform
@@ -62,6 +64,7 @@ class DiffParser:
         diff_parser = parent_subparser.add_parser("diff", help="See the difference between each category in several .budget files. Each file is considered one time period and differences are rolling between periods.")
         CommonParser.setup_render_options(diff_parser)
         diff_parser.add_argument("files", nargs="+")
+        diff_parser.add_argument("--output", choices=["text","csv"], default="text")
         diff_parser.set_defaults(func=DiffParser.diff)
 
     @staticmethod
@@ -71,13 +74,18 @@ class DiffParser:
             raise ValueError("Must have at least 2 files to produce a diff.")
 
         file_entries = [ parse.budget(filename) for filename in args.files ]
-
         category_trees = [ transform.generate_category_dict(f) for f in file_entries]
         diff_tree = transform.generate_diff_dict(category_trees)
         names = [ Path(f).stem for f in args.files ]
-        table = render.diff_tree(diff_tree, names, render_data)
-        console = Console()
-        console.print(table)
+
+        if args.output == "text":
+            table = render.diff_tree(diff_tree, names, render_data)
+            console = Console()
+            console.print(table)
+        elif args.output == "csv":
+            csv_rows = render.diff_csv(diff_tree, names, render_data)
+            writer = csv.writer(sys.stdout)
+            writer.writerows(csv_rows)
 
 class ConvertParser:
     @staticmethod
