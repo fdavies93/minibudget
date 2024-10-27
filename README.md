@@ -69,6 +69,8 @@ like it.**
 - [ ] Budget assertions for explicit and implicit categories
 - [ ] Allow negative income and positive expenses accounts for edge cases
       in business & financial records.
+- [ ] Add a formatting mode.
+- [ ] Write a treesitter grammar for neovim etc.
 
 ### Data Handling
 
