@@ -61,21 +61,43 @@ which is probably redundant versus a web app.
 **Pull requests welcome. I may or may not implement these myself when I feel 
 like it.**
 
+### Budget Format / Parsing
+
 - [ ] Attach notes to budget categories; view them by using a flag
 - [ ] Comment syntax
 - [ ] Metadata for specifying period the budget covers, default currency, etc. 
-- [ ] Assertions by allocating to categories with children; check if the budget for a category matches the total of its children (e.g. does discretionary spending match the totals of clothes, dining out, and entertainment?)
-- [ ] Make formatting and report structure customizable
-- [ ] Generate cool charts
-- [ ] Proper multi-currency support (this is probably out of scope for a simple tool like this)
+- [ ] Budget assertions for explicit and implicit categories
+- [ ] Allow negative income and positive expenses accounts for edge cases
+      in business & financial records.
+
+### Data Handling
+
+- [ ] Make treatment of numbers / currency consistent
+    - [ ] Use Decimal / bespoke money handler consistently for currency
+    - [ ] Write consistent currency formatter class or interface; build
+          in concept of 'normal' decimalisation (e.g. USD has 2, NTD has 0).
+- [ ] Proper multi-currency support
+- [ ] Add more canned currency formats
 - [ ] Implement non-regression and unit testing
-- [ ] CSV output options, especially for `diff` (as table grows large very quickly)
-- [ ] JSON output options, mainly for testing but could be used for integrations
+- [ ] Switch to Calendar Versioning (likely YYYY-MM-R or YYYY-MM-DD)
+
+### Conversion from other formats
+
 - [ ] Convert ledger records to minibudget format
 - [ ] Convert csvs to minibudget format
+- [ ] Convert JSON output format back into 
+
+### Outputs / rendering
+
+- [ ] CSV output for `report`
+- [ ] JSON output for `diff`
+- [ ] JSON output for `report`
+- [ ] Generate cool charts
+- [ ] Make formatting and report structure customizable
 
 ## Completed Features
 
+- [x] CSV output for `diff`
 - [x] Cool formatting for CLI
 - [x] Integrate with beancount via bean-query to import real spending
 - [x] Totals for budget categories, not just the top level income / expenses / unassigned
