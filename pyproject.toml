@@ -16,6 +16,7 @@ classifiers=[
 python = "^3.10"
 rich = "^13.9.2"
 beanquery = {version = "^0.1.dev0", optional = true}
+plotly = "^5.24.1"
 
 [tool.poetry.extras]
 convert = ["beanquery"]

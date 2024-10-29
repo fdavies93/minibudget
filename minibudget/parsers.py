@@ -1,4 +1,5 @@
 import csv
+from os import stat
 import sys
 from minibudget import parse
 from minibudget import render
@@ -7,6 +8,7 @@ from minibudget import convert
 from minibudget.render import RenderOptions
 from rich.console import Console
 from pathlib import Path
+from plotly import subplots
 
 class CommonParser:
     @staticmethod
@@ -40,6 +42,44 @@ class CommonParser:
             render_data.currency_decimals = currency_data.currency_decimals
         
         return render_data
+
+class ChartParser:
+    @staticmethod
+    def setup(parent_subparser):
+        chart_parser = parent_subparser.add_parser("chart",help="Generate charts based on minibudget files.")
+        chart_parser.add_argument("type", choices=["donut"]) 
+        chart_parser.add_argument("files", nargs="+")
+        chart_parser.set_defaults(func=ChartParser.chart)
+
+    @staticmethod
+    def chart(args):
+        method_dict = {
+            "donut": ChartParser.donut
+        }
+        method_dict[args.type](args)
+
+    @staticmethod
+    def donut(args):
+        if len(args.files) > 1:
+            raise ValueError("Donut charts must be generated from a single file.")
+        entries = parse.budget(args.files[0])
+        income_entries = list(filter(lambda e: e.is_income, entries))
+        expense_entries = list(filter(lambda e: not e.is_income, entries))
+        income_dict = transform.generate_simple_dict(income_entries)
+        expense_dict = transform.generate_simple_dict(expense_entries)
+        layout = subplots.make_subplots(specs=[[{"type":"pie"}]])
+        total_expenses = sum(expense_dict.values())
+        layout.add_pie(
+                       title={"text": f"Expenses\n{total_expenses}"},
+                       labels=list(expense_dict.keys()),
+                       values=list(expense_dict.values()),
+                       hole=0.3,
+                       row=1,
+                       col=1,
+                       sort=False,
+                       textinfo="label+value"
+                       )
+        layout.show()
 
 class ReportParser:
     @staticmethod

@@ -66,3 +66,12 @@ def entries_to_report_data(entries: list[Entry]) -> ReportData:
         calculate_total(entries)
     )
     return report_data
+
+def generate_simple_dict(entries: list[Entry]) -> dict[str, int]:
+    simple_dict = {}
+    for entry in entries:
+        category_label = ":".join(entry.categories)
+        simple_dict[category_label] = abs(entry.amount)
+    return simple_dict
+
+
