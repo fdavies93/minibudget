@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "minibudget"
-version = "0.1.2"
+version = "2024.11.1"
 description = "A simple CLI tool for personal and small business budgeting."
 authors = ["Frank Davies"]
 repository = "https://github.com/fdavies93/minibudget"

@@ -82,7 +82,6 @@ like it.**
 - [ ] Proper multi-currency support
 - [ ] Add more canned currency formats
 - [ ] Implement non-regression and unit testing
-- [ ] Switch to Calendar Versioning (likely YYYY-MM-R or YYYY-MM-DD)
 
 ### Conversion from other formats
 
@@ -101,6 +100,7 @@ like it.**
 
 ## Completed Features
 
+- [x] Switch to Calendar Versioning (likely YYYY-MM-R or YYYY-MM-DD)
 - [x] Sunburst chart for expenses reports
 - [x] CSV output for `diff`
 - [x] Cool formatting for CLI
