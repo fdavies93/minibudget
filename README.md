@@ -49,6 +49,7 @@ get the required packages.
 - [`minibudget report`](docs/report.md)
 - [`minibudget diff`](docs/diff.md)
 - [`minibudget convert`](docs/convert.md)
+- [`minibudget chart`](docs/chart.md)
 - [currency formats](docs/currency-formats.md)
 
 ## Possible Features
@@ -94,11 +95,13 @@ like it.**
 - [ ] CSV output for `report`
 - [ ] JSON output for `diff`
 - [ ] JSON output for `report`
-- [ ] Generate cool charts
 - [ ] Make formatting and report structure customizable
+- [ ] Stacked bar chart for income and expenses over time (visualising `diff`)
+- [ ] Sunburst chart for income reports, for people with many income streams
 
 ## Completed Features
 
+- [x] Sunburst chart for expenses reports
 - [x] CSV output for `diff`
 - [x] Cool formatting for CLI
 - [x] Integrate with beancount via bean-query to import real spending
