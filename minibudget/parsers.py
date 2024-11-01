@@ -9,6 +9,7 @@ from minibudget.render import RenderOptions
 from rich.console import Console
 from pathlib import Path
 from plotly import subplots
+import plotly.graph_objects as go
 
 class CommonParser:
     @staticmethod
@@ -47,14 +48,15 @@ class ChartParser:
     @staticmethod
     def setup(parent_subparser):
         chart_parser = parent_subparser.add_parser("chart",help="Generate charts based on minibudget files.")
-        chart_parser.add_argument("type", choices=["donut"]) 
-        chart_parser.add_argument("files", nargs="+")
+        chart_parser.add_argument("type", choices=["sunburst"]) 
+        chart_parser.add_argument("file")
         chart_parser.set_defaults(func=ChartParser.chart)
 
     @staticmethod
     def chart(args):
         method_dict = {
-            "donut": ChartParser.donut
+            "donut": ChartParser.donut,
+            "sunburst": ChartParser.sunburst
         }
         method_dict[args.type](args)
 
@@ -62,10 +64,8 @@ class ChartParser:
     def donut(args):
         if len(args.files) > 1:
             raise ValueError("Donut charts must be generated from a single file.")
-        entries = parse.budget(args.files[0])
-        income_entries = list(filter(lambda e: e.is_income, entries))
+        entries = parse.budget(args.file)
         expense_entries = list(filter(lambda e: not e.is_income, entries))
-        income_dict = transform.generate_simple_dict(income_entries)
         expense_dict = transform.generate_simple_dict(expense_entries)
         layout = subplots.make_subplots(specs=[[{"type":"pie"}]])
         total_expenses = sum(expense_dict.values())
@@ -80,6 +80,21 @@ class ChartParser:
                        textinfo="label+value"
                        )
         layout.show()
+
+    @staticmethod
+    def sunburst(args):
+        entries = parse.budget(args.file)
+        expense_entries = list(filter(lambda e: not e.is_income, entries))
+        parent_list, label_list, value_list = transform.generate_triple_list(expense_entries)
+        burst = go.Figure(go.Sunburst(
+            labels=label_list, 
+            values=value_list, 
+            parents=parent_list, 
+            branchvalues="total",
+            textinfo="label",
+            hoverinfo="label+value+percent entry"
+        ))
+        burst.show()
 
 class ReportParser:
     @staticmethod

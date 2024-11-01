@@ -74,4 +74,17 @@ def generate_simple_dict(entries: list[Entry]) -> dict[str, int]:
         simple_dict[category_label] = abs(entry.amount)
     return simple_dict
 
-
+def generate_triple_list(entries: list[Entry]) -> tuple[list[str],list[str],list[int]]:
+    category_dict = generate_category_dict(entries)
+    value_list = []
+    parent_list = []
+    label_list = []
+    for category, entry in category_dict.items():
+        value_list.append(abs(entry.amount))
+        cat_split = category.split(":")
+        label_list.append(cat_split[-1])
+        if len(cat_split) > 1:
+            parent_list.append(cat_split[-2])
+        else:
+            parent_list.append("")
+    return (parent_list, label_list, value_list)
