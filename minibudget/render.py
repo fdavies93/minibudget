@@ -30,7 +30,7 @@ def report_table(title: str,categories: dict[str, Entry], total: int, render_dat
     def render_category(entry: Entry):
         depth = len(entry.categories) - 1
         tag = entry.categories[-1]
-        left = f"{" " * 4 * depth}{tag}"
+        left = f"{' ' * 4 * depth}{tag}"
         right = currency(entry.amount, render_data)
         table.add_row(left, right)
     
@@ -64,7 +64,7 @@ def diff_tree(tree: dict[str, list[Union[Entry, None]]], names: list[str], rende
                 tag = entry.categories[-1]
                 depth = len(entry.categories) - 1
 
-        category = f"{"    "*depth}{tag}"
+        category = f"{'    '*depth}{tag}"
         cells = [Text( currency(amounts[0], render_data) )]
 
         for i, amount in enumerate(amounts[1:]):

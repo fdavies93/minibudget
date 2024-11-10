@@ -40,7 +40,7 @@ def beancount(file: str, currency: str, start: str, end: str) -> list[Entry]:
     if end != None:
         date_inner.append(f"date <= {end}")
     if start != None or end != None:
-        date_part = f" and ( { " and ".join(date_inner) } )"
+        date_part = f" and ( { ' and '.join(date_inner) } )"
     # Issue query to get chart of accounts
     output = subprocess.run(["bean-query",
                              file,
