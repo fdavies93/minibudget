@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link rel="stylesheet" href="https://unpkg.com/mvp.css">
+</head>
+
+<body>
+	<main>
+		<section>
+			<table>
+				<thead>
+					<tr>
+						{% for col in table[0] %}
+						<td>{{col}}</td>
+						{% endfor %}
+					</tr>
+				</thead>
+				<tbody>
+					{% for col in table[1:] %}
+					<tr>
+						{% for cell in col %}
+						<td>{{cell}}</td>
+						{% endfor %}
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</section>
+	</main>
+</body>
+
+</html>
