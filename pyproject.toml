@@ -13,7 +13,7 @@ classifiers=[
 ]
 
 [tool.poetry.dependencies]
-python = "^3.10"
+python = "^3.12"
 rich = "^13.9.2"
 beanquery = {version = "^0.1.dev0", optional = true}
 plotly = "^5.24.1"
