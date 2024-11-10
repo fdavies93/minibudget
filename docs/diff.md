@@ -24,11 +24,13 @@ always rolling (i.e. as they relate to the previous budget in the list).
 
 ### Rendering
 
-`--output {text | csv}`
+`--output {text | csv | html }`
 
 The format of the output. Defaults to text.
 
-When set to CSV output, the `width` option will be ignored.
+When set to CSV or HTML output, the `width` option will be ignored.
+
+In HTML the width is set to 100%.
 
 CSV output is columnar to make it easier to read for other parts of toolchains,
 or for making graphs in your preferred spreadsheet program.

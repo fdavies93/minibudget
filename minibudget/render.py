@@ -6,6 +6,7 @@ from minibudget.helpers import dft_diff_dict, dft_entry_dict
 from rich.table import Table
 from rich.text import Text
 from typing import Union
+from jinja2 import Environment, PackageLoader, select_autoescape
 
 @dataclass
 class RenderOptions:
@@ -129,6 +130,16 @@ def diff_csv(
     dft_diff_dict(tree, fn=render_category)
 
     return rows
+
+def diff_html(
+        tree: dict[str, list[Union[Entry, None]]],
+        names: list[str],
+        render_data: RenderOptions
+) -> str: 
+    table = diff_csv(tree, names, render_data)
+    env = Environment(loader=PackageLoader("minibudget"), autoescape=select_autoescape())
+    template = env.get_template("diff.html")
+    return template.render(table=table)
 
 def currency(units: int, render_data: RenderOptions) -> str:
     # so we can do e.g. -$100 instead of $-100

@@ -119,7 +119,7 @@ class DiffParser:
         diff_parser = parent_subparser.add_parser("diff", help="See the difference between each category in several .budget files. Each file is considered one time period and differences are rolling between periods.")
         CommonParser.setup_render_options(diff_parser)
         diff_parser.add_argument("files", nargs="+")
-        diff_parser.add_argument("--output", choices=["text","csv"], default="text")
+        diff_parser.add_argument("--output", choices=["text","csv","html"], default="text")
         diff_parser.set_defaults(func=DiffParser.diff)
 
     @staticmethod
@@ -141,6 +141,9 @@ class DiffParser:
             csv_rows = render.diff_csv(diff_tree, names, render_data)
             writer = csv.writer(sys.stdout)
             writer.writerows(csv_rows)
+        elif args.output == "html":
+            page: str = render.diff_html(diff_tree, names, render_data)
+            print(page)
 
 class ConvertParser:
     @staticmethod
