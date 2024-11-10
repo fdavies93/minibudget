@@ -30,7 +30,7 @@ def report_table(title: str,categories: dict[str, Entry], total: int, render_dat
     def render_category(entry: Entry):
         depth = len(entry.categories) - 1
         tag = entry.categories[-1]
-        left = f"{" " * 4 * depth}{tag}"
+        left = f"{' ' * 4 * depth}{tag}"
         right = currency(entry.amount, render_data)
         table.add_row(left, right)
     
